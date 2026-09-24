@@ -1,0 +1,31 @@
+name: CI
+on:
+  push:
+    branches: [ "main", "dev" ]
+  pull_request:
+    branches: [ "main", "dev" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install Dependencies (API)
+        working-directory: backend
+        run: npm ci
+
+      - name: Install Dependencies (Web)
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build Backend (API)
+        working-directory: backend
+        run: npm run build
+
+      - name: Build Frontend (Web)
+        working-directory: frontend
+        run: npm run build
